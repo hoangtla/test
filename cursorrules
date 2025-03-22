@@ -43,10 +43,13 @@
      - [X] Cart model
      - [X] Review model
    - [ ] Implement NextAuth authentication:
-     - [ ] Email/Password authentication
-     - [ ] OAuth providers (Google, GitHub)
-     - [ ] JWT configuration
-     - [ ] Protected routes
+     - [X] Email/Password authentication
+     - [ ] OAuth providers (Google, GitHub) [Pending: Will implement later]
+     - [X] JWT configuration
+     - [X] Protected routes
+     - [ ] Authentication UI pages:
+       - [ ] Sign in page
+       - [ ] Error page
 
 ###3. [ ] Core Features Development
    - [ ] Product Management:
