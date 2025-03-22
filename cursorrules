@@ -51,26 +51,46 @@
        - [ ] Sign in page
        - [ ] Error page
 
-###3. [ ] Core Features Development
-   - [ ] Product Management:
-     - Product CRUD operations
-     - Category management
-     - Image upload with Uploadthing
-     - Search and filtering
-     - Pagination
-   
-   - [ ] User Management:
-     - User registration and login
-     - Profile management
-     - Address management
-     - Order history
-
-   - [ ] Shopping Features:
-     - Shopping cart functionality
-     - Wishlist
-     - Checkout process
-     - Payment integration with Stripe
-     - Order tracking
+###3. [✓] Core Features Development
+   - [✓] Home Layout:
+  - Create `(home)` folder in `app` directory
+  - Header with logo, search bar, and navigation
+  - Footer with links and social media
+- [✓] Homepage:
+  - banner carousel
+  - latest products
+- [ ] Products Catalog:
+  - Sidebar with categories and filters
+  - Search results
+  - Product grid
+  - Pagination
+- [ ] Product pages:
+  - Create product detail page layout
+  - Implement image gallery with thumbnails
+  - Add product information section:
+    - Title, price, description
+    - Stock status
+    - Add to cart button
+  - Reviews and ratings section:
+    - Display existing reviews
+    - Add review form for authenticated users
+    - Star rating component
+  - Related products section:
+    - Show products from same category
+    - Product card carousel
+- [ ] Shopping cart:
+  - Add/remove items
+  - Update quantities
+  - Cart persistence
+- [ ] Checkout process:
+  - Shipping information
+  - Payment integration (Stripe)
+  - Order confirmation
+- [ ] User dashboard:
+  - Order history
+  - Profile management
+  - Saved addresses
+  - Wishlist
 
 ###4. [ ] Admin Dashboard
    - [ ] Analytics Dashboard:
