@@ -16,6 +16,7 @@
 
 ## Scratchpad
 
+### E-commerce Website Development Steps
 
 1. Project Setup and Configuration
    - [X] Initialize Next.js 15 project with TypeScript
@@ -29,23 +30,23 @@
      - [X] Email: resend
      - [X] Payment: stripe
      - [X] Charts: recharts
-   - [ ] Set up ESLint and Prettier
-   - [ ] Configure environment variables
+   - [X] Set up ESLint and Prettier
+   - [X] Configure environment variables
 
-###2. [ ] Database and Authentication Setup
-   - Set up PostgreSQL database
-   - Configure Prisma schema:
-     - User model
-     - Product model
-     - Category model
-     - Order model
-     - Cart model
-     - Review model
-   - Implement NextAuth authentication:
-     - Email/Password authentication
-     - OAuth providers (Google, GitHub)
-     - JWT configuration
-     - Protected routes
+2. Database and Authentication Setup
+   - [X] Set up PostgreSQL database
+   - [X] Configure Prisma schema:
+     - [X] User model
+     - [X] Product model
+     - [X] Category model
+     - [X] Order model
+     - [X] Cart model
+     - [X] Review model
+   - [ ] Implement NextAuth authentication:
+     - [ ] Email/Password authentication
+     - [ ] OAuth providers (Google, GitHub)
+     - [ ] JWT configuration
+     - [ ] Protected routes
 
 ###3. [ ] Core Features Development
    - [ ] Product Management:
