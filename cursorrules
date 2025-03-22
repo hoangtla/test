@@ -1,0 +1,132 @@
+# Cursor Rules
+
+## Instructions
+
+- Record fixes for mistakes or corrections to avoid repetition in the `Lessons` section.
+- Organize thoughts and plan steps before starting a task in the `Scratchpad` section.
+- Clear old tasks if necessary.
+- Use todo markers for progress tracking:
+  - `[X]` Completed tasks
+  - `[ ]` Pending tasks
+- Update Scratchpad after completing subtasks.
+- Reflect and plan after milestones for better task management.
+- Always refer to Scratchpad before planning the next step.
+
+## Lessons
+
+## Scratchpad
+
+
+1. Project Setup and Configuration
+   - [X] Initialize Next.js 15 project with TypeScript
+   - [X] Install required dependencies:
+     - [X] UI: shadcn, lucide-react
+     - [X] State Management: zustand
+     - [X] Form Validation: zod
+     - [X] Authentication: next-auth@beta
+     - [X] Database: prisma, postgresql
+     - [X] File Upload: uploadthing
+     - [X] Email: resend
+     - [X] Payment: stripe
+     - [X] Charts: recharts
+   - [ ] Set up ESLint and Prettier
+   - [ ] Configure environment variables
+
+###2. [ ] Database and Authentication Setup
+   - Set up PostgreSQL database
+   - Configure Prisma schema:
+     - User model
+     - Product model
+     - Category model
+     - Order model
+     - Cart model
+     - Review model
+   - Implement NextAuth authentication:
+     - Email/Password authentication
+     - OAuth providers (Google, GitHub)
+     - JWT configuration
+     - Protected routes
+
+###3. [ ] Core Features Development
+   - [ ] Product Management:
+     - Product CRUD operations
+     - Category management
+     - Image upload with Uploadthing
+     - Search and filtering
+     - Pagination
+   
+   - [ ] User Management:
+     - User registration and login
+     - Profile management
+     - Address management
+     - Order history
+
+   - [ ] Shopping Features:
+     - Shopping cart functionality
+     - Wishlist
+     - Checkout process
+     - Payment integration with Stripe
+     - Order tracking
+
+###4. [ ] Admin Dashboard
+   - [ ] Analytics Dashboard:
+     - Sales charts with Recharts
+     - Revenue statistics
+     - User analytics
+     - Product performance
+   
+   - [ ] Management Interfaces:
+     - Product management
+     - Order management
+     - User management
+     - Category management
+     - Inventory tracking
+
+###5. [ ] Additional Features
+   - [ ] Email Notifications:
+     - Order confirmations
+     - Shipping updates
+     - Password reset
+     - Marketing emails using Resend
+   
+   - [ ] Reviews and Ratings:
+     - Product reviews
+     - Rating system
+     - Review moderation
+
+###6. [ ] UI/UX Implementation
+   - [ ] Customer-facing pages:
+     - Homepage with featured products
+     - Product listing pages
+     - Product detail pages
+     - Cart and checkout pages
+     - User profile pages
+   
+   - [ ] Admin Interface:
+     - Dashboard layout
+     - Data tables
+     - Forms with Zod validation
+     - Charts and analytics views
+
+###7. [ ] Performance and Security
+   - Implement caching strategies
+   - Add rate limiting
+   - Set up security headers
+   - Configure CORS
+   - Implement input validation
+   - Add error handling
+
+###8. [ ] Testing and Deployment
+   - Write unit tests
+   - Perform integration testing
+   - Set up CI/CD pipeline
+   - Deploy to production
+   - Monitor performance
+   - Set up error tracking
+
+###9. [ ] Documentation
+   - API documentation
+   - User guides
+   - Admin documentation
+   - Deployment guide
+   - Contributing guidelines
