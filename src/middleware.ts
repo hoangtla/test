@@ -1,8 +1,20 @@
-import { auth } from "./auth"
+import { withAuth } from "next-auth/middleware"
 
-export default auth
+export const runtime = 'nodejs'
+
+export default withAuth(
+  // `withAuth` augments your `Request` with the user's token.
+  function middleware() {
+    return
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => token?.role === "admin",
+    },
+  }
+)
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/dashboard/:path*"],
 } 

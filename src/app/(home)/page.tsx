@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { products } from "@/data/products"
 
 const banners = [
   {
@@ -24,55 +25,9 @@ const banners = [
   },
 ]
 
-const products = [
-  {
-    id: 1,
-    name: "Basic T-Shirt",
-    description: "Comfortable cotton t-shirt with minimalist design",
-    price: 29.99,
-    originalPrice: 39.99,
-    rating: 4.5,
-    reviews: 128,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-    href: "/products/basic-t-shirt",
-  },
-  {
-    id: 2,
-    name: "Denim Jeans",
-    description: "Classic fit jeans with premium denim quality",
-    price: 79.99,
-    originalPrice: 99.99,
-    rating: 4.8,
-    reviews: 256,
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d",
-    href: "/products/denim-jeans",
-  },
-  {
-    id: 3,
-    name: "Leather Jacket",
-    description: "Genuine leather jacket with modern styling",
-    price: 199.99,
-    originalPrice: 249.99,
-    rating: 4.7,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5",
-    href: "/products/leather-jacket",
-  },
-  {
-    id: 4,
-    name: "Sneakers",
-    description: "Lightweight and comfortable casual sneakers",
-    price: 89.99,
-    originalPrice: 119.99,
-    rating: 4.6,
-    reviews: 167,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-    href: "/products/sneakers",
-  },
-]
-
 export default function HomePage() {
   const [currentBanner, setCurrentBanner] = useState(0)
+  const latestProducts = products.slice(0, 4) // Chỉ hiển thị 4 sản phẩm mới nhất
 
   // Auto slide every 5 seconds
   useEffect(() => {
@@ -158,12 +113,12 @@ export default function HomePage() {
           </Button>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
+          {latestProducts.map((product) => (
             <div
               key={product.id}
               className="group relative overflow-hidden rounded-lg border bg-background transition-all duration-300 hover:shadow-lg"
             >
-              <Link href={product.href} className="relative block">
+              <Link href={`/products/${product.id}`} className="relative block">
                 <div className="relative aspect-square">
                   <Image
                     src={product.image}
@@ -199,7 +154,7 @@ export default function HomePage() {
                     ({product.reviews})
                   </span>
                 </div>
-                <Link href={product.href} className="block hover:underline">
+                <Link href={`/products/${product.id}`} className="block hover:underline">
                   <h3 className="font-medium">{product.name}</h3>
                 </Link>
                 <p className="mt-1 text-sm text-muted-foreground line-clamp-2">

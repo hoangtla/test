@@ -59,11 +59,11 @@
 - [✓] Homepage:
   - banner carousel
   - latest products
-- [ ] Products Catalog:
-  - Sidebar with categories and filters
-  - Search results
-  - Product grid
-  - Pagination
+- [✓] Products Catalog:
+  - [✓] Sidebar with categories and filters
+  - [✓] Search results
+  - [✓] Product grid
+  - [✓] Pagination UI (logic pending)
 - [ ] Product pages:
   - Create product detail page layout
   - Implement image gallery with thumbnails
