@@ -1,6 +1,9 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
@@ -25,51 +28,86 @@ const products = [
   {
     id: 1,
     name: "Basic T-Shirt",
+    description: "Comfortable cotton t-shirt with minimalist design",
     price: 29.99,
+    originalPrice: 39.99,
+    rating: 4.5,
+    reviews: 128,
     image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
     href: "/products/basic-t-shirt",
   },
   {
     id: 2,
     name: "Denim Jeans",
+    description: "Classic fit jeans with premium denim quality",
     price: 79.99,
+    originalPrice: 99.99,
+    rating: 4.8,
+    reviews: 256,
     image: "https://images.unsplash.com/photo-1542272604-787c3835535d",
     href: "/products/denim-jeans",
   },
   {
     id: 3,
     name: "Leather Jacket",
+    description: "Genuine leather jacket with modern styling",
     price: 199.99,
+    originalPrice: 249.99,
+    rating: 4.7,
+    reviews: 89,
     image: "https://images.unsplash.com/photo-1551028719-00167b16eac5",
     href: "/products/leather-jacket",
   },
   {
     id: 4,
     name: "Sneakers",
+    description: "Lightweight and comfortable casual sneakers",
     price: 89.99,
+    originalPrice: 119.99,
+    rating: 4.6,
+    reviews: 167,
     image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
     href: "/products/sneakers",
   },
 ]
 
 export default function HomePage() {
+  const [currentBanner, setCurrentBanner] = useState(0)
+
+  // Auto slide every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const prevSlide = () => {
+    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length)
+  }
+
+  const nextSlide = () => {
+    setCurrentBanner((prev) => (prev + 1) % banners.length)
+  }
+
   return (
     <div className="flex flex-col gap-8 pb-8">
       {/* Banner Carousel */}
       <div className="relative">
         <div className="relative h-[400px] w-full overflow-hidden">
-          {banners.map((banner) => (
+          {banners.map((banner, index) => (
             <div
               key={banner.id}
-              className="absolute inset-0 h-full w-full"
-              style={{ display: banner.id === 1 ? "block" : "none" }}
+              className={`absolute inset-0 h-full w-full transform transition-transform duration-500 ease-in-out ${
+                index === currentBanner ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <Image
                 src={banner.image}
                 alt={banner.title}
                 fill
                 className="object-cover"
-                priority={banner.id === 1}
+                priority={index === 0}
               />
               <div className="absolute inset-0 bg-black/60" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
@@ -85,17 +123,30 @@ export default function HomePage() {
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80"
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background/90"
+          onClick={prevSlide}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80"
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background/90"
+          onClick={nextSlide}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
+        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+          {banners.map((_, index) => (
+            <button
+              key={index}
+              className={`h-2 w-2 rounded-full transition-colors ${
+                index === currentBanner ? "bg-white" : "bg-white/50"
+              }`}
+              onClick={() => setCurrentBanner(index)}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Latest Products */}
@@ -108,26 +159,60 @@ export default function HomePage() {
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
-            <Link
+            <div
               key={product.id}
-              href={product.href}
-              className="group relative overflow-hidden rounded-lg border bg-background"
+              className="group relative overflow-hidden rounded-lg border bg-background transition-all duration-300 hover:shadow-lg"
             >
-              <div className="aspect-square">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-              </div>
+              <Link href={product.href} className="relative block">
+                <div className="relative aspect-square">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute right-2 top-2 rounded-full bg-white px-2 py-1 text-xs font-semibold text-black">
+                    -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <Button variant="secondary">View Details</Button>
+                  </div>
+                </div>
+              </Link>
               <div className="p-4">
-                <h3 className="font-medium">{product.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  ${product.price.toFixed(2)}
+                <div className="mb-2 flex items-center gap-1">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.floor(product.rating)
+                            ? "fill-yellow-400 text-yellow-400"
+                            : i < product.rating
+                            ? "fill-yellow-400/50 text-yellow-400"
+                            : "fill-gray-200 text-gray-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    ({product.reviews})
+                  </span>
+                </div>
+                <Link href={product.href} className="block hover:underline">
+                  <h3 className="font-medium">{product.name}</h3>
+                </Link>
+                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                  {product.description}
                 </p>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="font-semibold">${product.price.toFixed(2)}</span>
+                  <span className="text-sm text-muted-foreground line-through">
+                    ${product.originalPrice.toFixed(2)}
+                  </span>
+                </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
