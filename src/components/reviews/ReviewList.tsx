@@ -56,21 +56,22 @@ export function ReviewList({ reviews }: ReviewListProps) {
                 ))}
               </div>
               <p className="mt-2 text-gray-600">{review.comment}</p>
+              
               {review.media && review.media.length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-4">
                   {review.media.map((item, index) => (
-                    <div key={index} className="relative aspect-square">
+                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
                       {item.type === 'image' ? (
                         <Image
                           src={item.url}
                           alt={`Review media ${index + 1}`}
                           fill
-                          className="object-cover rounded-lg"
+                          className="object-cover"
                         />
                       ) : (
                         <video
                           src={item.url}
-                          className="w-full h-full object-cover rounded-lg"
+                          className="w-full h-full object-cover"
                           controls
                         />
                       )}

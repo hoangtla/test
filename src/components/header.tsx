@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
-import { Search } from "@/components/search"
+import { Search } from "./search"
+import { CartSheet } from "./cart/CartSheet"
 
 export function Header() {
   return (
@@ -8,8 +11,8 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <span className="text-xl font-bold">Store</span>
         </Link>
-        <div className="flex flex-1 items-center space-x-6">
-          <nav className="flex items-center space-x-6">
+        <div className="flex flex-1 items-center">
+          <nav className="flex items-center space-x-6 mr-6">
             <Link href="/products" className="text-sm font-medium hover:text-primary">
               Products
             </Link>
@@ -23,11 +26,15 @@ export function Header() {
           <div className="flex-1">
             <Search />
           </div>
-          <nav className="flex items-center space-x-4">
-            <Link href="/auth/signin" className="text-sm font-medium hover:text-primary">
-              Sign In
-            </Link>
-          </nav>
+        </div>
+        <div className="flex items-center space-x-4 ml-6">
+          <CartSheet />
+          <Link
+            href="/auth/signin"
+            className="text-sm font-medium hover:text-primary"
+          >
+            Sign In
+          </Link>
         </div>
       </div>
     </header>

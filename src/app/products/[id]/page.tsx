@@ -8,6 +8,16 @@ import { ReviewForm } from "@/components/reviews/ReviewForm"
 import { ReviewList } from "@/components/reviews/ReviewList"
 import { RelatedProducts } from "@/components/products/RelatedProducts"
 import { Review } from "@/types"
+import { useCart } from "@/contexts/CartContext"
+import { toast } from "sonner"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface ProductPageProps {
   params: {
@@ -62,6 +72,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [reviews, setReviews] = useState<Review[]>(mockReviews)
+  const { addToCart } = useCart()
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
   if (!product) {
     return (
@@ -100,7 +112,17 @@ export default function ProductPage({ params }: ProductPageProps) {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
   }
 
-  const handleReviewSubmit = (review: { rating: number; comment: string }) => {
+  const handleReviewSubmit = (review: { 
+    rating: number
+    comment: string
+    media?: { type: 'image' | 'video'; url: string; file: File }[]
+  }) => {
+    // Giả lập việc upload file và nhận URL từ server
+    const uploadedMedia = review.media?.map(m => ({
+      type: m.type,
+      url: m.url // Trong thực tế, đây sẽ là URL từ server sau khi upload
+    }))
+
     const newReview: Review = {
       id: reviews.length + 1,
       user: {
@@ -111,142 +133,191 @@ export default function ProductPage({ params }: ProductPageProps) {
       comment: review.comment,
       date: new Date().toISOString().split("T")[0],
       productId: product.id,
+      media: uploadedMedia
     }
     setReviews((prev) => [newReview, ...prev])
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        {/* Gallery Section */}
-        <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-lg group">
-            <Image
-              src={images[selectedImage]}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              quality={100}
-            />
-            <button
-              onClick={previousImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white z-10"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white z-10"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
-            {images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                className={`relative aspect-square overflow-hidden rounded-lg ${
-                  selectedImage === index
-                    ? "ring-2 ring-blue-500"
-                    : "hover:ring-2 hover:ring-gray-300"
-                }`}
-              >
-                <Image
-                  src={image}
-                  alt={`${product.name} thumbnail ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
+  const handleAddToCart = () => {
+    setShowConfirmDialog(true)
+  }
 
-        {/* Product Information */}
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <div className="flex items-baseline gap-4">
-              <span className="text-2xl font-bold">${product.price}</span>
-              <span className="text-lg text-gray-500 line-through">
-                ${product.originalPrice}
-              </span>
-              <span className="text-green-600 font-semibold">
-                {Math.round(
-                  ((product.originalPrice - product.price) /
-                    product.originalPrice) *
-                    100
-                )}
-                % off
-              </span>
+  const confirmAddToCart = () => {
+    addToCart(product, quantity)
+    setShowConfirmDialog(false)
+    toast.success("Đã thêm sản phẩm vào giỏ hàng")
+  }
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity)
+    window.location.href = "/checkout"
+  }
+
+  return (
+    <>
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {/* Gallery Section */}
+          <div className="space-y-4">
+            <div className="relative aspect-square overflow-hidden rounded-lg group">
+              <Image
+                src={images[selectedImage]}
+                alt={product.name}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                quality={100}
+              />
+              <button
+                onClick={previousImage}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white z-10"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white z-10"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`relative aspect-square overflow-hidden rounded-lg ${
+                    selectedImage === index
+                      ? "ring-2 ring-blue-500"
+                      : "hover:ring-2 hover:ring-gray-300"
+                  }`}
+                >
+                  <Image
+                    src={image}
+                    alt={`${product.name} thumbnail ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h2 className="font-semibold">Mô tả sản phẩm</h2>
-            <p className="text-gray-600">{product.description}</p>
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="font-semibold">Tình trạng</h2>
-            <p className="text-green-600 font-medium">Còn hàng</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <span className="font-semibold">Số lượng:</span>
-              <div className="flex items-center border rounded-md">
-                <button
-                  onClick={decreaseQuantity}
-                  className="p-2 hover:bg-gray-100"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="px-4 py-2 border-x">{quantity}</span>
-                <button
-                  onClick={increaseQuantity}
-                  className="p-2 hover:bg-gray-100"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
+          {/* Product Information */}
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+              <div className="flex items-baseline gap-4">
+                <span className="text-2xl font-bold">${product.price}</span>
+                <span className="text-lg text-gray-500 line-through">
+                  ${product.originalPrice}
+                </span>
+                <span className="text-green-600 font-semibold">
+                  {Math.round(
+                    ((product.originalPrice - product.price) /
+                      product.originalPrice) *
+                      100
+                  )}
+                  % off
+                </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 flex items-center justify-center gap-2">
-                <ShoppingCart className="h-5 w-5" />
-                Thêm vào giỏ hàng
-              </button>
-              <button className="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 flex items-center justify-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                Mua ngay
-              </button>
+            <div className="space-y-2">
+              <h2 className="font-semibold">Mô tả sản phẩm</h2>
+              <p className="text-gray-600">{product.description}</p>
+            </div>
+
+            <div className="space-y-2">
+              <h2 className="font-semibold">Tình trạng</h2>
+              <p className="text-green-600 font-medium">Còn hàng</p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <span className="font-semibold">Số lượng:</span>
+                <div className="flex items-center border rounded-md">
+                  <button
+                    onClick={decreaseQuantity}
+                    className="p-2 hover:bg-gray-100"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="px-4 py-2 border-x">{quantity}</span>
+                  <button
+                    onClick={increaseQuantity}
+                    className="p-2 hover:bg-gray-100"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  Thêm vào giỏ hàng
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 flex items-center justify-center gap-2"
+                >
+                  <CreditCard className="h-5 w-5" />
+                  Mua ngay
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Reviews Section */}
-      <div className="border-t pt-12 space-y-8">
-        <h2 className="text-2xl font-bold">Đánh giá từ khách hàng</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <ReviewForm onSubmit={handleReviewSubmit} />
+        {/* Reviews Section */}
+        <div className="border-t pt-12 space-y-8">
+          <h2 className="text-2xl font-bold">Đánh giá từ khách hàng</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <ReviewForm onSubmit={handleReviewSubmit} />
+            </div>
+            <div>
+              <ReviewList reviews={reviews} />
+            </div>
           </div>
-          <div>
-            <ReviewList reviews={reviews} />
-          </div>
+        </div>
+
+        {/* Related Products Section */}
+        <div className="border-t pt-12">
+          <RelatedProducts
+            products={products}
+            currentProductId={product.id}
+          />
         </div>
       </div>
 
-      {/* Related Products Section */}
-      <div className="border-t pt-12">
-        <RelatedProducts
-          products={products}
-          currentProductId={product.id}
-        />
-      </div>
-    </div>
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Xác nhận thêm vào giỏ hàng</DialogTitle>
+            <DialogDescription>
+              Bạn có muốn thêm {quantity} sản phẩm &ldquo;{product?.name}&rdquo; vào giỏ hàng?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <button
+              onClick={() => setShowConfirmDialog(false)}
+              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Hủy
+            </button>
+            <button
+              onClick={confirmAddToCart}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              Xác nhận
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 } 
